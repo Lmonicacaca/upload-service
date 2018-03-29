@@ -33,14 +33,13 @@ public class UploadController extends BaseController<Upload> {
     @RequestMapping(value = "upload",method = RequestMethod.POST)
     @ResponseBody
     public Object upload(HttpServletRequest request){
-        List<String> urlList = new ArrayList<>();
+        Map<String,String> map = new HashMap<>();
         CommonsMultipartResolver cmr = new CommonsMultipartResolver(request.getServletContext());
         if (cmr.isMultipart(request)) {
             MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) (request);
-            Iterator<String> files = mRequest.getFileNames();
-            while (files.hasNext()) {
-                MultipartFile file = mRequest.getFile(files.next());
-
+            Map<String, MultipartFile> mapFiles = mRequest.getFileMap();
+            for(Map.Entry<String, MultipartFile> entry : mapFiles.entrySet()) {
+                MultipartFile file = entry.getValue();
                 if (file != null) {
                     Upload upload = new Upload();
                     upload.setId(new TimestampPkGenerator().next(getClass()));
@@ -68,14 +67,14 @@ public class UploadController extends BaseController<Upload> {
                         }
                         file.transferTo(new File(newImageDisk));
                         uploadManager.save(upload);
-                        urlList.add(upload.getInternetUrl());
+                        map.put(entry.getKey(),upload.getInternetUrl());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return success(urlList);
+        return success(map);
 
     }
 
