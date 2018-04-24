@@ -61,10 +61,11 @@ public class UploadController extends BaseController<Upload> {
                     if(!f.isDirectory()){
                         f.mkdirs();
                     }
-                    upload.setDiskUrl(newImageDisk+"/"+fileName);
+                    String filePath = newImageDisk+"/"+fileName;
+                    upload.setDiskUrl(filePath);
                     upload.setInternetUrl("/download/" + upload.getId());
                     try {
-                        file.transferTo(new File(newImageDisk));
+                        file.transferTo(new File(filePath));
                         uploadManager.save(upload);
                         map.put(entry.getKey(),upload.getInternetUrl());
                     } catch (IOException e) {
