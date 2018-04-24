@@ -19,6 +19,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -26,6 +27,7 @@ public class UploadController extends BaseController<Upload> {
     @Value("${image_disk}")
     private String imageDisk;
 
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
 
     @Autowired
     private UploadManager uploadManager;
@@ -48,15 +50,13 @@ public class UploadController extends BaseController<Upload> {
                     String fileName = file.getOriginalFilename();
                     int lastIndex = fileName.lastIndexOf(".");
                     String type = fileName.substring(lastIndex + 1, fileName.length());
-
-
                     fileName = UUID.randomUUID().toString().replace("-", "") + "." + type;
                     upload.setContentType(type);
                     upload.setSize(fileName.length() + "");
                     upload.setFileName(fileName);
                     String newImageDisk = imageDisk;
-
-                    newImageDisk += fileName;
+                    String date = simpleDateFormat.format(new Date());
+                    newImageDisk = newImageDisk+"/"+date+"/"+fileName;//新的地址
                     upload.setDiskUrl(newImageDisk);
                     upload.setInternetUrl("/download/" + upload.getId());
                     try {
