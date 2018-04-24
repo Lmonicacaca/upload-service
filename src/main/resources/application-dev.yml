@@ -10,4 +10,4 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
 
-image_disk: /root/imgae/dcpay/
+image_disk: /root/image/dcpay
