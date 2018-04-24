@@ -56,15 +56,14 @@ public class UploadController extends BaseController<Upload> {
                     upload.setFileName(fileName);
                     String newImageDisk = imageDisk;
                     String date = simpleDateFormat.format(new Date());
-                    newImageDisk = newImageDisk+"/"+date+"/"+fileName;//新的地址
-                    upload.setDiskUrl(newImageDisk);
+                    newImageDisk = newImageDisk+"/"+date;//目录
+                    File f = new File(newImageDisk);
+                    if(!f.isDirectory()){
+                        f.mkdirs();
+                    }
+                    upload.setDiskUrl(newImageDisk+"/"+fileName);
                     upload.setInternetUrl("/download/" + upload.getId());
                     try {
-                        File f = new File(newImageDisk);
-                        File parentFile = f.getParentFile();
-                        if (!parentFile.isDirectory()) {
-                            f.mkdirs();
-                        }
                         file.transferTo(new File(newImageDisk));
                         uploadManager.save(upload);
                         map.put(entry.getKey(),upload.getInternetUrl());
