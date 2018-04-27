@@ -3,6 +3,7 @@ package com.mbr.upload.controller;
 import com.mbr.upload.common.utils.CommonUtils;
 import com.mbr.upload.domain.Upload;
 import com.mbr.upload.manager.UploadManager;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,6 @@ public class DownloadController {
         String start = "0";
         String end = "0";
         if (CommonUtils.isImage(f)) {
-            //MediaType mt = new MediaType(MediaType.IMAGE_PNG);
             if (imagesPattern.equals("png")) {
                 headers.setContentType(MediaType.IMAGE_PNG);
             }else if (imagesPattern.equals("jpg")||imagesPattern.equals("jpeg")){
@@ -103,14 +103,11 @@ public class DownloadController {
 
                 //accessFile.readFully(b);
 
-                responseEntity = new ResponseEntity(b, headers, statusCode);
+                responseEntity = new ResponseEntity(FileUtils.readFileToByteArray(f), headers, statusCode);
 
             }else {
                 statusCode = HttpStatus.OK;
-                FileInputStream inputStream = new FileInputStream(f);
-                byte[] b=new byte[inputStream.available()];
-                inputStream.read(b);
-                responseEntity = new ResponseEntity(b, headers, statusCode);
+                responseEntity = new ResponseEntity(FileUtils.readFileToByteArray(f), headers, statusCode);
 
             }
 
