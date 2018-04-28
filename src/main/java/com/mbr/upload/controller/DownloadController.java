@@ -114,7 +114,7 @@ public class DownloadController {
 
         }else {
             statusCode = HttpStatus.NOT_FOUND;
-            responseEntity = new ResponseEntity(null, headers, statusCode);
+            responseEntity = new ResponseEntity( headers, statusCode);
             return responseEntity;
         }
 
