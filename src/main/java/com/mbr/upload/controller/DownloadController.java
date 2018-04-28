@@ -81,8 +81,8 @@ public class DownloadController {
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.setContentDispositionFormData("attachment",new String(f.getName().getBytes("gbk"), "ISO8859-1"));
         }
+        HttpStatus statusCode;
         if(f.exists()){
-            HttpStatus statusCode;
             if (imagesPattern.equals("apk")){
                 statusCode = HttpStatus.PARTIAL_CONTENT;
 
@@ -102,17 +102,22 @@ public class DownloadController {
                 }
 
                 //accessFile.readFully(b);
-
+                //statusCode = HttpStatus.OK;
                 responseEntity = new ResponseEntity(FileUtils.readFileToByteArray(f), headers, statusCode);
+                return responseEntity;
 
             }else {
                 statusCode = HttpStatus.OK;
                 responseEntity = new ResponseEntity(FileUtils.readFileToByteArray(f), headers, statusCode);
-
+                return responseEntity;
             }
 
+        }else {
+            statusCode = HttpStatus.NOT_FOUND;
+            responseEntity = new ResponseEntity(null, headers, statusCode);
+            return responseEntity;
         }
-        return responseEntity;
+
     }
 
 }
