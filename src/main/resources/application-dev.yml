@@ -1,15 +1,5 @@
 server:
  port: 9907
 
-spring:
-  data:
-    mongodb:
-      uri: mongodb://admin:admin@47.100.116.120:9998/coinListenner
-  resources:
-    add-mappings: true
-  jackson:
-    default-property-inclusion: NON_NULL
 
-
-image_disk: /root/image/dcpay
 
