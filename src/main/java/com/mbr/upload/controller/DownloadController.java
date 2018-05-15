@@ -57,23 +57,6 @@ public class DownloadController {
             headers.add("Cache-Control", "no-cache");
 
         }else if(imagesPattern.equals("apk")){
-            String range = request.getHeader("Range");
-            logger.info("range====>{}",range);
-            if(StringUtils.isNotEmpty(range)){
-                String[] bytesStr = range.split("=");
-                String[] newStr = bytesStr[1].split("-");
-                start = newStr[0];
-                try {
-                    end = newStr[1];
-                }catch (IndexOutOfBoundsException e){
-                    end=String.valueOf(f.length());
-                }
-
-                logger.info("startStr==>{},end====>{}",start,end);
-                headers.add("Content-Range", "bytes " + start + "-" + end + "/" + f.length());
-            }
-
-
             headers.setContentType(MediaType.valueOf("application/vnd.android.package-archive"));
             headers.setContentLength(f.length());
             headers.setContentDispositionFormData("attachment",new String(f.getName().getBytes("gbk"), "ISO8859-1"));
@@ -84,25 +67,7 @@ public class DownloadController {
         HttpStatus statusCode;
         if(f.exists()){
             if (imagesPattern.equals("apk")){
-                statusCode = HttpStatus.PARTIAL_CONTENT;
-
-                byte[] b;
-                if (end.equals("0")&&start.equals("0")){
-                    FileInputStream inputStream = new FileInputStream(f);
-                    b=new byte[inputStream.available()];
-                    inputStream.read(b);
-                }else{
-                    RandomAccessFile accessFile = new RandomAccessFile(f,"r");
-                    accessFile.seek(Long.parseLong(start));
-                    int leng = (Integer.parseInt(end)-Integer.parseInt(start));
-                    b=new byte[leng];
-                    logger.info("b 长度为：{}",b.length);
-                    accessFile.read(b,0,leng);
-                    accessFile.close();
-                }
-
-                //accessFile.readFully(b);
-                //statusCode = HttpStatus.OK;
+                statusCode = HttpStatus.OK;
                 responseEntity = new ResponseEntity(FileUtils.readFileToByteArray(f), headers, statusCode);
                 return responseEntity;
 
