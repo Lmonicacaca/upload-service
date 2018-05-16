@@ -1,19 +1,24 @@
 
+
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
-      defaultZone: http://eureka:eureka@172.31.224.243:9902/eureka/
+      defaultZone: @eureka.client.service-url.defaultZone@
 
 spring:
   application:
       name: upload-service
   cloud:
     config:
-      profile: test
+      profile: @spring.profiles.active@
       label: master
-      uri: ${SPRING_CONFIG_URI:http://172.31.224.243:9901}
+      uri: ${SPRING_CONFIG_URI:@spring.cloud.config.uri@}
   zipkin:
-      base-url: http://47.100.47.200:9949/
+    base-url: @spring.zipkin.base-url@
+
+
+
+

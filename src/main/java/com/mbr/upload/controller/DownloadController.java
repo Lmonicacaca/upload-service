@@ -40,10 +40,10 @@ public class DownloadController {
         String fileName = f.getName();
         int len = fileName.lastIndexOf(".");
         String imagesPattern  = fileName.substring(len+1,fileName.length()).toLowerCase();
-        ResponseEntity<byte[]> responseEntity=null ;
+        ResponseEntity<byte[]> responseEntity ;
         HttpHeaders headers = new HttpHeaders();
-        String start = "0";
-        String end = "0";
+        headers.add("Content-Length",f.length()+"");
+        headers.add("Cache-Control", f.length()+"");
         if (CommonUtils.isImage(f)) {
             if (imagesPattern.equals("png")) {
                 headers.setContentType(MediaType.IMAGE_PNG);
@@ -54,11 +54,10 @@ public class DownloadController {
             }
             headers.add("Accept-Ranges", "bytes");
             headers.add("Pragma", "no-cache");
-            headers.add("Cache-Control", "no-cache");
 
         }else if(imagesPattern.equals("apk")){
             headers.setContentType(MediaType.valueOf("application/vnd.android.package-archive"));
-            headers.setContentLength(f.length());
+
             headers.setContentDispositionFormData("attachment",new String(f.getName().getBytes("gbk"), "ISO8859-1"));
         }else{
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
