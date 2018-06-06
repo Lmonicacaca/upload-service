@@ -12,6 +12,7 @@ public class Upload {
     private String internetUrl;
     private Date createTime;
     private Date updateTime;
+    private Long channel;
 
     public Long getId() {
         return id;
@@ -75,5 +76,13 @@ public class Upload {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Long channel) {
+        this.channel = channel;
     }
 }

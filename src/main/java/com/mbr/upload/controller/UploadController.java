@@ -6,6 +6,7 @@ import com.mbr.upload.common.utils.TimestampPkGenerator;
 import com.mbr.upload.domain.Upload;
 import com.mbr.upload.manager.UploadManager;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ public class UploadController extends BaseController<Upload> {
     @ResponseBody
     public Object upload(HttpServletRequest request) {
         Map<String, String> map = new HashMap<>();
+        String channel = request.getParameter("channel");
         CommonsMultipartResolver cmr = new CommonsMultipartResolver(request.getServletContext());
         if (cmr.isMultipart(request)) {
             MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) (request);
@@ -68,6 +70,9 @@ public class UploadController extends BaseController<Upload> {
                     }
                     String filePath = newImageDisk + "/" + fileName;
                     upload.setDiskUrl(filePath);
+                    if (StringUtils.isNotEmpty(channel)) {
+                        upload.setChannel(Long.parseLong(channel));
+                    }
                     upload.setInternetUrl("/download/" + upload.getId());
                     try {
                         file.transferTo(new File(filePath));
@@ -85,7 +90,7 @@ public class UploadController extends BaseController<Upload> {
 
     @RequestMapping(value = "uploadForPlist", method = RequestMethod.POST)
     @ResponseBody
-    public Object uploadForPlist(@RequestParam(value = "data")String data) {
+    public Object uploadForPlist(@RequestParam(value = "data")String data,@RequestParam("channel") Long channel) {
         Map<String, String> map = new HashMap<>();
         Upload upload = new Upload();
         upload.setId(new TimestampPkGenerator().next(getClass()));
@@ -98,6 +103,7 @@ public class UploadController extends BaseController<Upload> {
         upload.setContentType(type);
         upload.setSize("");
         upload.setFileName(fileName);
+        upload.setChannel(channel);
         String newImageDisk = imageDisk;
         String date = simpleDateFormat.format(new Date());
         newImageDisk = newImageDisk + "/" + date;//目录
