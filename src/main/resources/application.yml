@@ -1,6 +1,6 @@
 spring:
   application:
-    name: upload-service
+    #name: @spring.service.name@-${spring.profiles.active}
   profiles:
     #active: @spring.profiles.active@
   debug: @spring.debug@
