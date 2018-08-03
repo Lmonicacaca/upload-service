@@ -3,11 +3,12 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
-    metadata-map:
-      zone: ${spring.profiles.active}
-  region: mbr
-  mbr:
-    availability-zones: ${spring.profiles.active}
+  # upload 服务开放所有服务调用，不区分开发测试环境
+  #  metadata-map:
+  #    zone: ${spring.profiles.active}
+  #region: mbr
+  #mbr:
+  #  availability-zones: ${spring.profiles.active}
   client:
     register-with-eureka: true
     prefer-same-zone-eureka: true
@@ -21,7 +22,7 @@ spring:
       label: master
       uri: ${SPRING_CONFIG_URI:@spring.cloud.config.uri@}
   application:
-    name: @spring.service.name@-${spring.profiles.active}
+    name: @spring.service.name@
   zipkin:
     base-url: @spring.zipkin.base-url@
 
