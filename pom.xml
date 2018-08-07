@@ -18,7 +18,7 @@
     </parent>
 
     <properties>
-        <spring.service.name>pay-upload</spring.service.name>
+        <spring.service.name>service-upload</spring.service.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-cloud.version>Edgware.RELEASE</spring-cloud.version>
